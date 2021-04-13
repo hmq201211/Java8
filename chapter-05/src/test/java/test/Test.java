@@ -17,6 +17,7 @@ public class Test {
         Trader mario = new Trader("Mario", "Milan");
         Trader alan = new Trader("Alan", "Cambridge");
         Trader brian = new Trader("Brian", "Cambridge");
+
         List<Transaction> transactions = Arrays.asList(
                 new Transaction(brian, 2011, 300),
                 new Transaction(raoul, 2012, 1000),
@@ -24,8 +25,10 @@ public class Test {
                 new Transaction(mario, 2012, 710),
                 new Transaction(mario, 2012, 700),
                 new Transaction(alan, 2012, 950)
+
         );
         question1(transactions);
+
         question2(transactions);
         question3(transactions);
         question4(transactions);
@@ -68,8 +71,8 @@ public class Test {
 
     //(6) 打印生活在剑桥的交易员的所有交易额。
     private static void question6(List<Transaction> transactions) {
-        List<Integer> collect = transactions.stream().filter(transaction -> transaction.getTrader().getCity().equals("Cambridge")).map(Transaction::getValue).collect(Collectors.toList());
-        System.out.println(collect);
+                List<Integer> collect = transactions.stream().filter(transaction -> transaction.getTrader().getCity().equals("Cambridge")).map(Transaction::getValue).collect(Collectors.toList());
+                System.out.println(collect);
     }
 
     //(7) 所有交易中，最高的交易额是多少？
@@ -82,6 +85,8 @@ public class Test {
     private static void question8(List<Transaction> transactions) {
         Optional<Transaction> min = transactions.stream().min(Comparator.comparingInt(Transaction::getValue));
         min.ifPresent(System.out::println);
+        min.ifPresent(System.out::println);
+        
     }
 
 }

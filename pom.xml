@@ -14,6 +14,13 @@
         <module>chapter-03</module>
         <module>chapter-05</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.18</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -21,8 +28,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <target>14</target>
-                    <source>14</source>
+                    <target>8</target>
+                    <source>8</source>
                 </configuration>
             </plugin>
         </plugins>
