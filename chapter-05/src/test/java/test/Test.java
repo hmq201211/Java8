@@ -3,15 +3,37 @@ package test;
 import pojo.Trader;
 import pojo.Transaction;
 
+import java.io.IOException;
 import java.lang.annotation.Target;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLOutput;
 import java.util.*;
+import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.*;
 
 public class Test {
     public static void main(String[] args) {
+        fibonacci().limit(10).forEach(
+                integers -> System.out.println(integers[0] + ":" + integers[1])
+        );
+        fibonacci(new IntSupplier() {
+            Integer previous = 0;
+            Integer current = 1;
+            @Override
+            public int getAsInt() {
+                Integer temp = previous;
+                previous = current;
+                current = previous + temp;
+                return temp;
+            }
+        }).limit(5).forEach(System.out::println);
         Trader raoul = new Trader("Raoul", "Cambridge");
         Trader mario = new Trader("Mario", "Milan");
         Trader alan = new Trader("Alan", "Cambridge");
@@ -34,6 +56,13 @@ public class Test {
         question6(transactions);
         question7(transactions);
         question8(transactions);
+
+        List<int[]> collect = IntStream.rangeClosed(1, 100).boxed().flatMap(
+                i -> IntStream.rangeClosed(i, 100).filter(j -> Math.sqrt(i * i + j * j) % 1 == 0).mapToObj(j -> new int[]{i, j, (int) Math.sqrt(i * i + j * j)})
+        ).collect(Collectors.toList());
+        collect.forEach(i -> System.out.println(i[0] + ":" + i[1] + ":" + i[2]));
+        List<String> list = mostFrequentWords("chapter-05/src/main/resources/Romeo and Juliet.txt");
+        System.out.println(list);
     }
 
     //(1) 找出2011年发生的所有交易，并按交易额排序（从低到高）。
@@ -84,4 +113,20 @@ public class Test {
         System.out.println(integer.get());
     }
 
+    private static List<String> mostFrequentWords(String path) {
+        try (Stream<String> line = Files.lines(Paths.get(path), Charset.defaultCharset())) {
+            Map<String, Long> collect = line.flatMap(i -> Arrays.stream(i.split(" "))).collect(groupingBy(i -> i, counting()));
+            return collect.entrySet().stream().sorted((i, j) -> (int) (j.getValue() - i.getValue())).limit(50).map(Map.Entry::getKey).collect(toList());
+        } catch (IOException exception) {
+            return null;
+        }
+    }
+
+    private static Stream<Integer[]> fibonacci() {
+        return Stream.iterate(new Integer[]{0, 1}, i -> new Integer[]{i[1], i[0] + i[1]});
+    }
+
+    private static IntStream fibonacci(IntSupplier intSupplier){
+                return IntStream.generate(intSupplier);
+    }
 }
